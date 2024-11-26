@@ -11,53 +11,45 @@ on:
 jobs:
   test:
     runs-on: ${{ matrix.os }}
-
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, ubuntu-20.04, ubuntu-18.04]
+        python-version: [3.8, 3.7, 3.6, 2.7]
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Set up Python
+    - uses: actions/checkout@v2
+    - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
-
+      with:
+        python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        pip install pytest markdown
-        pip install coveralls
-        python setup.py develop
-
+        pip install setuptools
+        pip install pytest
+        pip install markdown
     - name: Run tests
       run: |
-        make clean
-        coverage run --source=markdown_checklist setup.py test
-        coverage report -m
-
-    - name: Upload coverage to Coveralls
-      run: coveralls
-
+        pytest
   release:
     needs: test
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Set up Python 3.8
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.x
       uses: actions/setup-python@v2
-
+      with:
+        python-version: 3.x
     - name: Install dependencies
       run: |
-        pip install pytest markdown
+        pip install setuptools
+        pip install wheel
         pip install twine
-
-    - name: Create release
+    - name: Create distribution
+      run: python setup.py sdist bdist_wheel
+    - name: Publish to GitHub Packages
       run: |
-        git diff --exit-code
-        git tag -a -m v`python -c 'import markdown_checklist; print(markdown_checklist.__version__)'` v`python -c 'import markdown_checklist; print(markdown_checklist.__version__)'`
-        git push origin master --tags
-        twine upload dist/*
+        twine upload --repository-url https://upload.pypi.org/legacy/ dist/*
+      env:
+        TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
+        TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
