@@ -26,7 +26,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        pip install `python -c 'from setup import META; print(" ".join(META["extras_require"]["testing"] + META["install_requires"]))'`
+        pip install pytest markdown
         pip install coveralls
         python setup.py develop
 
@@ -49,12 +49,10 @@ jobs:
 
     - name: Set up Python 3.8
       uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
 
     - name: Install dependencies
       run: |
-        pip install `python -c 'from setup import META; print(" ".join(META["extras_require"]["testing"] + META["install_requires"]))'`
+        pip install pytest markdown
         pip install twine
 
     - name: Create release
