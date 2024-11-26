@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: [2.7, 3.5, pypy]
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        pip install `python -c 'from setup import META; print(" ".join(META["extras_require"]["testing"] + META["install_requires"]))'`
+        pip install coveralls
+        python setup.py develop
+
+    - name: Run tests
+      run: |
+        make clean
+        coverage run --source=markdown_checklist setup.py test
+        coverage report -m
+
+    - name: Upload coverage to Coveralls
+      run: coveralls
+
+  release:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+
+    - name: Install dependencies
+      run: |
+        pip install `python -c 'from setup import META; print(" ".join(META["extras_require"]["testing"] + META["install_requires"]))'`
+        pip install twine
+
+    - name: Create release
+      run: |
+        git diff --exit-code
+        git tag -a -m v`python -c 'import markdown_checklist; print(markdown_checklist.__version__)'` v`python -c 'import markdown_checklist; print(markdown_checklist.__version__)'`
+        git push origin master --tags
+        twine upload dist/*

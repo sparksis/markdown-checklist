@@ -76,3 +76,13 @@ There is also a small JavaScript/jQuery library to make checkboxes interactive:
     });
 
 See included `checklists.js` for details.
+
+GitHub Actions Workflow for CI
+------------------------------
+
+This project uses GitHub Actions for continuous integration. The workflow is defined in the `.github/workflows/ci.yml` file. It runs tests on push to the `master` branch and on pull request creation/synchronization.
+
+GitHub Packages for Release
+---------------------------
+
+This project uses GitHub Packages for releasing new versions. The release process is defined in the `Makefile` and the GitHub Actions workflow. When a new version is released, a release object is created in GitHub Packages.
