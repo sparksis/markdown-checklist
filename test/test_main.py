@@ -28,11 +28,29 @@ lorem ipsum
 
     expected = """
 <h1>Hello World</h1>
-<ul class="checklist">
-<li><input type="checkbox" disabled> foo</li>
-<li><input type="checkbox" disabled checked> bar</li>
-<li><input type="checkbox" disabled> baz</li>
-</ul>
+<ac:task-list>
+<ac:task>
+<ac:task-id>1</ac:task-id>
+<ac:task-status>incomplete</ac:task-status>
+<ac:task-body>
+<span class="placeholder-inline-tasks"> foo</span>
+</ac:task-body>
+</ac:task>
+<ac:task>
+<ac:task-id>2</ac:task-id>
+<ac:task-status>complete</ac:task-status>
+<ac:task-body>
+<span class="placeholder-inline-tasks"> bar</span>
+</ac:task-body>
+</ac:task>
+<ac:task>
+<ac:task-id>3</ac:task-id>
+<ac:task-status>incomplete</ac:task-status>
+<ac:task-body>
+<span class="placeholder-inline-tasks"> baz</span>
+</ac:task-body>
+</ac:task>
+</ac:task-list>
 <p>lorem ipsum</p>
     """.strip()
 
@@ -58,11 +76,29 @@ lorem ipsum
     html = markdown(source, extensions=[ChecklistExtension()])
     assert html == """
 <h1>Hello World</h1>
-<ul class="checklist">
-<li><input type="checkbox" disabled checked> foo</li>
-<li><input type="checkbox" disabled> bar</li>
-<li><input type="checkbox" disabled checked> baz</li>
-</ul>
+<ac:task-list>
+<ac:task>
+<ac:task-id>1</ac:task-id>
+<ac:task-status>complete</ac:task-status>
+<ac:task-body>
+<span class="placeholder-inline-tasks"> foo</span>
+</ac:task-body>
+</ac:task>
+<ac:task>
+<ac:task-id>2</ac:task-id>
+<ac:task-status>incomplete</ac:task-status>
+<ac:task-body>
+<span class="placeholder-inline-tasks"> bar</span>
+</ac:task-body>
+</ac:task>
+<ac:task>
+<ac:task-id>3</ac:task-id>
+<ac:task-status>complete</ac:task-status>
+<ac:task-body>
+<span class="placeholder-inline-tasks"> baz</span>
+</ac:task-body>
+</ac:task>
+</ac:task-list>
 <p>lorem ipsum</p>
     """.strip()
 
@@ -82,15 +118,51 @@ def test_class():
 
     html = markdown(source, extensions=[ChecklistExtension()])
     assert html == """
-<ul class="checklist">
-<li><input type="checkbox" disabled checked> foo</li>
-<li><input type="checkbox" disabled> bar</li>
-<li><input type="checkbox" disabled checked> baz</li>
-</ul>
+<ac:task-list>
+<ac:task>
+<ac:task-id>1</ac:task-id>
+<ac:task-status>complete</ac:task-status>
+<ac:task-body>
+<span class="placeholder-inline-tasks"> foo</span>
+</ac:task-body>
+</ac:task>
+<ac:task>
+<ac:task-id>2</ac:task-id>
+<ac:task-status>incomplete</ac:task-status>
+<ac:task-body>
+<span class="placeholder-inline-tasks"> bar</span>
+</ac:task-body>
+</ac:task>
+<ac:task>
+<ac:task-id>3</ac:task-id>
+<ac:task-status>complete</ac:task-status>
+<ac:task-body>
+<span class="placeholder-inline-tasks"> baz</span>
+</ac:task-body>
+</ac:task>
+</ac:task-list>
 <hr />
-<ul class="checklist">
-<li><input type="checkbox" disabled> lorem</li>
-<li><input type="checkbox" disabled checked> ipsum</li>
-<li><input type="checkbox" disabled> ...</li>
-</ul>
+<ac:task-list>
+<ac:task>
+<ac:task-id>1</ac:task-id>
+<ac:task-status>incomplete</ac:task-status>
+<ac:task-body>
+<span class="placeholder-inline-tasks"> lorem</span>
+</ac:task-body>
+</ac:task>
+<ac:task>
+<ac:task-id>2</ac:task-id>
+<ac:task-status>complete</ac:task-status>
+<ac:task-body>
+<span class="placeholder-inline-tasks"> ipsum</span>
+</ac:task-body>
+</ac:task>
+<ac:task>
+<ac:task-id>3</ac:task-id>
+<ac:task-status>incomplete</ac:task-status>
+<ac:task-body>
+<span class="placeholder-inline-tasks"> ...</span>
+</ac:task-body>
+</ac:task>
+</ac:task-list>
     """.strip()

@@ -4,9 +4,19 @@ from markdown_checklist.extension import ChecklistExtension
 
 
 def render_item(caption, checked):
-    checked = ' checked' if checked else ''
-    template = '<li><label><input type="checkbox" disabled%s>%s</label></li>'
-    return template % (checked, caption)
+    status = 'complete' if checked else 'incomplete'
+    template = """
+<ac:task>
+<ac:task-id>{id}</ac:task-id>
+<ac:task-status>{status}</ac:task-status>
+<ac:task-body>
+<span class="placeholder-inline-tasks">{caption}</span>
+</ac:task-body>
+</ac:task>
+    """.strip()
+    return template.format(id=render_item.counter, status=status, caption=caption)
+
+render_item.counter = 1
 
 
 def test_checklists():
@@ -17,23 +27,29 @@ def test_checklists():
     """.strip()
 
     expected = """
-<ul class="check-list">
-<li><input type="checkbox" disabled> foo</li>
-<li><input type="checkbox" disabled checked> bar</li>
-<li><input type="checkbox" disabled> baz</li>
-</ul>
-    """.strip()
-
-    html = markdown(source,
-            extensions=[ChecklistExtension(list_class="check-list")])
-    assert html == expected
-
-    expected = """
-<ul class="checklist">
-<li><label><input type="checkbox" disabled> foo</label></li>
-<li><label><input type="checkbox" disabled checked> bar</label></li>
-<li><label><input type="checkbox" disabled> baz</label></li>
-</ul>
+<ac:task-list>
+<ac:task>
+<ac:task-id>1</ac:task-id>
+<ac:task-status>incomplete</ac:task-status>
+<ac:task-body>
+<span class="placeholder-inline-tasks"> foo</span>
+</ac:task-body>
+</ac:task>
+<ac:task>
+<ac:task-id>2</ac:task-id>
+<ac:task-status>complete</ac:task-status>
+<ac:task-body>
+<span class="placeholder-inline-tasks"> bar</span>
+</ac:task-body>
+</ac:task>
+<ac:task>
+<ac:task-id>3</ac:task-id>
+<ac:task-status>incomplete</ac:task-status>
+<ac:task-body>
+<span class="placeholder-inline-tasks"> baz</span>
+</ac:task-body>
+</ac:task>
+</ac:task-list>
     """.strip()
 
     html = markdown(source,

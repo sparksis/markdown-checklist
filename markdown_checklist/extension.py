@@ -56,5 +56,16 @@ class ChecklistPostprocessor(Postprocessor):
 
 
 def render_item(caption, checked):
-    checked = ' checked' if checked else ''
-    return '<li><input type="checkbox" disabled%s>%s</li>' % (checked, caption)
+    status = 'complete' if checked else 'incomplete'
+    template = """
+<ac:task>
+<ac:task-id>{id}</ac:task-id>
+<ac:task-status>{status}</ac:task-status>
+<ac:task-body>
+<span class="placeholder-inline-tasks">{caption}</span>
+</ac:task-body>
+</ac:task>
+    """.strip()
+    return template.format(id=render_item.counter, status=status, caption=caption)
+
+render_item.counter = 1
