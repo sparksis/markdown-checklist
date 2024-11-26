@@ -7,6 +7,7 @@ release: readme dist
 			v`python -c 'import markdown_checklist; print(markdown_checklist.__version__)'`
 	git push origin master --tags
 	twine upload dist/*
+	gh release create v`python -c 'import markdown_checklist; print(markdown_checklist.__version__)'` --notes "Release v`python -c 'import markdown_checklist; print(markdown_checklist.__version__)'`"
 
 dist: clean test
 	rm -r dist || true
