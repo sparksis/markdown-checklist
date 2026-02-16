@@ -1,0 +1,11 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: markdown-checklist
+  description: "The `markdown-checklist` is a Python Markdown extension that converts GitHub-inspired task lists with checkboxes (e.g., `* [ ] foo`) into HTML, and includes an optional JavaScript/jQuery library for interactive functionality."
+  annotations:
+    github.com/project-slug: sparksis/markdown-checklist
+spec:
+  type: service
+  lifecycle: experimental
+  owner: sparksis
